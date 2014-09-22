@@ -4,7 +4,7 @@ pub enum Token {
 }
 
 pub struct Board {
-    cells: [Option<Token>, ..9]
+    pub cells: [Option<Token>, ..9]
 }
 
 impl Board {
