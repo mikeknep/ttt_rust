@@ -1,14 +1,14 @@
 #[deriving(PartialEq)]
-enum Token {
+pub enum Token {
     X, O
 }
 
-struct Board {
+pub struct Board {
     cells: [Option<Token>, ..9]
 }
 
 impl Board {
-    fn new() -> Board {
+    pub fn new() -> Board {
         Board { cells: [None, ..9] }
     }
 }
