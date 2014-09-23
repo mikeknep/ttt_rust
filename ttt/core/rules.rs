@@ -1,10 +1,10 @@
 use super::board::{Board, Token};
 
-fn is_valid_position(position: int, cells: &[Option<Token>]) -> bool {
+pub fn is_valid_position(position: int, cells: &[Option<Token>]) -> bool {
     position >= 0 && position <= 8 && cells[position as uint] == None
 }
 
-fn is_game_over(board: &Board) -> bool {
+pub fn is_game_over(board: &Board) -> bool {
     is_winner_on_board(board) || is_full(board)
 }
 
