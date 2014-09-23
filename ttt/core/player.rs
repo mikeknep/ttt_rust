@@ -23,16 +23,21 @@ impl Player {
 
 
 
+#[cfg(test)]
+mod test {
+    use super::Player;
+    use super::super::board::{Board, O};
 
-#[test]
-fn choosing_next_move_returns_cell_index() {
-    use super::board::{O};
     #[allow(unused_variable)]
     fn mock_decision_maker(board: &Board) -> uint {
         4u
     }
-    let player: Player = Player::new(O, mock_decision_maker);
-    let board = Board::new();
 
-    assert!(player.choose_next_move(&board) == 4u);
+    #[test]
+    fn choosing_next_move_returns_cell_index() {
+        let player: Player = Player::new(O, mock_decision_maker);
+        let board = Board::new();
+
+        assert!(player.choose_next_move(&board) == 4u);
+    }
 }

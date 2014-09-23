@@ -1,6 +1,6 @@
 use std::io;
-use super::super::core::board::{Board};
-use super::super::core::rules::{is_valid_position};
+use super::super::core::board::Board;
+use super::super::core::rules::is_valid_position;
 
 pub fn get_next_move(board: &Board) -> uint {
     println!("Where do you want to play?");

@@ -15,18 +15,23 @@ impl Board {
 
 
 
-#[test]
-fn builds_board_with_all_cells_empty() {
-    let board: Board = Board::new();
-    let mut cells = board.cells.iter();
+#[cfg(test)]
+mod test {
+    use super::Board;
 
-    assert!(cells.all(|cell| *cell == None));
-}
+    #[test]
+    fn builds_board_with_all_cells_empty() {
+        let board: Board = Board::new();
+        let mut cells = board.cells.iter();
 
-#[test]
-fn builds_board_with_nine_cells() {
-    let board: Board = Board::new();
-    let mut cells = board.cells.iter();
+        assert!(cells.all(|cell| *cell == None));
+    }
 
-    assert!(cells.count() == 9u);
+    #[test]
+    fn builds_board_with_nine_cells() {
+        let board: Board = Board::new();
+        let mut cells = board.cells.iter();
+
+        assert!(cells.count() == 9u);
+    }
 }
