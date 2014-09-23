@@ -1,4 +1,5 @@
 use super::board::{Board, Token};
+use super::player::{Player};
 
 pub fn is_valid_position(position: int, cells: &[Option<Token>]) -> bool {
     position >= 0 && position <= 8 && cells[position as uint] == None
@@ -16,6 +17,15 @@ fn is_winner_on_board(board: &Board) -> bool {
 fn is_full(board: &Board) -> bool {
     let mut cells = board.cells.iter();
     !cells.any(|cell| *cell == None)
+}
+
+
+pub fn current_player(cells: &[Option<Token>], p1: Player, p2: Player) -> Player {
+    let mut played_cells = cells.iter().filter(|&cell| *cell != None);
+    match played_cells.count() % 2 {
+        0 => p1,
+        _ => p2
+    }
 }
 
 
@@ -53,4 +63,18 @@ fn already_played_spot_is_invalid() {
     { board.cells.as_mut_slice()[5] = Some(O); }
 
     assert!(is_valid_position(5, board.cells.as_slice()) == false);
+}
+
+#[test]
+fn recognizes_player_1_as_current_player() {
+    use super::board::{X,O};
+    let board: Board = Board::new();
+    #[allow(unused_variable)]
+    fn mock_decision_maker(board: &Board) -> uint {
+        4u
+    }
+    let p1: Player = Player::new(X, mock_decision_maker);
+    let p2: Player = Player::new(O, mock_decision_maker);
+
+    assert!(current_player(board.cells, p1, p2).eq(&p1));
 }

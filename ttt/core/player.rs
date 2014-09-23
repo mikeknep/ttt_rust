@@ -14,6 +14,10 @@ impl Player {
         let dm = self.decision_maker;
         dm(board)
     }
+
+    pub fn eq(&self, other: &Player) -> bool {
+        self.token == other.token
+    }
 }
 
 
