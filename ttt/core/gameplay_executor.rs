@@ -1,6 +1,6 @@
 use super::board::{Token};
 
-fn execute_turn(cells: &mut[Option<Token>], cell_index: uint, token: Option<Token>) {
+pub fn execute_turn(cells: &mut[Option<Token>], cell_index: uint, token: Option<Token>) {
     cells[cell_index] = token;
 }
 
