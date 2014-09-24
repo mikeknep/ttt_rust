@@ -17,8 +17,7 @@ pub fn is_game_over(board: &Board) -> bool {
     is_winner_on_board(board) || is_full(board)
 }
 
-
-fn is_winner_on_board(board: &Board) -> bool {
+pub fn is_winner_on_board(board: &Board) -> bool {
     let winning_paths = all_winning_paths();
     let mut iterable_paths = winning_paths.iter();
     iterable_paths.any(|path| is_winner_on_path(path, board))
