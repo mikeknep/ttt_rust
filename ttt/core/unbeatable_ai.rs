@@ -36,15 +36,16 @@ fn score_cell(cell_index: uint, board: &Board, token: Token, depth: uint) -> f64
         let new_open_cells = collect_open_cells(&deref_board);
         for &cell_index in new_open_cells.iter() {
             let cell_score = score_cell(cell_index, &deref_board, opposite_token(token), depth + 1u);
-            if depth % 2 == 0 && cell_score > comp_score {
-                comp_score = cell_score
-            }
-            if depth % 2 == 1 && cell_score < comp_score {
+            if should_update_score(cell_score, comp_score, depth) {
                 comp_score = cell_score
             }
         }
         comp_score
     }
+}
+
+fn should_update_score(cell_score: f64, comp_score: f64, depth: uint) -> bool {
+    (depth % 2 == 0 && cell_score > comp_score) || (depth % 2 == 1 && cell_score < comp_score)
 }
 
 fn opposite_token(token: Token) -> Token {
@@ -85,7 +86,7 @@ fn score_board(board: &Board, depth: uint) -> f64 {
 
 #[cfg(test)]
 mod test {
-    use super::{choose_best_available_cell, score_board, get_highest_scored_cell, collect_open_cells};
+    use super::{choose_best_available_cell, score_board, get_highest_scored_cell, collect_open_cells, should_update_score};
     use super::super::board::{Board, Token, X, O};
 
     fn new_board_with_layout(cell_layout: Vec<Option<Token>>) -> Board {
@@ -201,5 +202,15 @@ mod test {
                                                       None   , None   , None   ));
 
         assert_eq!(score_board(&board, 2), -0.5f64);
+    }
+
+    #[test]
+    fn should_update_score_when_even_depth_and_cell_greater_than_comp() {
+        assert!(should_update_score(1f64, -0.5f64, 2u));
+    }
+
+    #[test]
+    fn should_update_score_when_odd_depth_and_cell_less_than_comp() {
+        assert!(should_update_score(-0.25f64, 0.2f64, 3u));
     }
 }
