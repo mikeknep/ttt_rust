@@ -2,17 +2,17 @@ use super::board::{Token, Board};
 
 pub struct Player {
     pub token: Token,
-    decision_maker: fn(&Board) -> uint
+    decision_maker: fn(&Board, Token) -> uint
 }
 
 impl Player {
-    pub fn new(token: Token, decision_maker: fn(&Board) -> uint) -> Player {
+    pub fn new(token: Token, decision_maker: fn(&Board, Token) -> uint) -> Player {
         Player { token: token, decision_maker: decision_maker }
     }
 
     pub fn choose_next_move(&self, board: &Board) -> uint {
         let dm = self.decision_maker;
-        dm(board)
+        dm(board, self.token)
     }
 
     pub fn eq(&self, other: &Player) -> bool {
@@ -26,10 +26,10 @@ impl Player {
 #[cfg(test)]
 mod test {
     use super::Player;
-    use super::super::board::{Board, O};
+    use super::super::board::{Board, Token, O};
 
     #[allow(unused_variable)]
-    fn mock_decision_maker(board: &Board) -> uint {
+    fn mock_decision_maker(board: &Board, token: Token) -> uint {
         4u
     }
 

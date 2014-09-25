@@ -1,6 +1,6 @@
-use super::board::Board;
+use super::board::{Board, Token};
 
-pub fn choose_first_open_spot(board: &Board) -> uint {
+pub fn choose_first_available_cell(board: &Board, token: Token) -> uint {
     for n in range(0, board.cell_count()) {
         if board.cells[n] == None {
             return n;
@@ -15,11 +15,11 @@ pub fn choose_first_open_spot(board: &Board) -> uint {
 
 #[cfg(test)]
 mod test {
-    use super::choose_first_open_spot;
+    use super::choose_first_available_cell;
     use super::super::board::{Board, X, O};
 
     #[test]
-    fn chooses_first_open_spot() {
+    fn chooses_first_available_cell() {
         let mut board: Board = Board::new();
         {
             let cells = board.cells.as_mut_slice();
@@ -27,12 +27,12 @@ mod test {
             cells[1] = Some(O);
         }
 
-        assert!(choose_first_open_spot(&board) == 2u);
+        assert!(choose_first_available_cell(&board, X) == 2u);
     }
 
     #[test]
     #[should_fail]
-    fn fails_if_no_open_spots() {
+    fn fails_if_no_available_cell() {
         let mut board: Board = Board::new();
         let count = board.cell_count();
         {
@@ -41,6 +41,6 @@ mod test {
                 cells[n] = Some(X);
             }
         }
-        choose_first_open_spot(&board);
+        choose_first_available_cell(&board, O);
     }
 }

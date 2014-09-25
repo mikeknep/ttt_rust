@@ -5,9 +5,9 @@ fn main() {
 
     let mut board: ttt::core::board::Board = ttt::core::board::Board::new();
     let player_1: ttt::core::player::Player = ttt::core::player::Player::new(ttt::core::board::X,
-                                                                             ttt::console_ui::io::get_next_move);
+                                                                             ttt::core::unbeatable_ai::choose_best_available_cell);
     let player_2: ttt::core::player::Player = ttt::core::player::Player::new(ttt::core::board::O,
-                                                                             ttt::core::simple_ai::choose_first_open_spot);
+                                                                             ttt::core::unbeatable_ai::choose_best_available_cell);
 
     while !ttt::core::rules::is_game_over(&board) {
         ttt::console_ui::presenter::display_board(&board);

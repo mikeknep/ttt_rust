@@ -67,11 +67,11 @@ fn is_full(board: &Board) -> bool {
 #[cfg(test)]
 mod test {
     use super::{is_valid_position, is_game_over, current_player, all_winning_paths};
-    use super::super::board::{Board, X, O};
+    use super::super::board::{Board, Token, X, O};
     use super::super::player::Player;
 
     #[allow(unused_variable)]
-    fn mock_decision_maker(board: &Board) -> uint {
+    fn mock_decision_maker(board: &Board, token: Token) -> uint {
         4u
     }
 
