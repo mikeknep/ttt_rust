@@ -1,7 +1,7 @@
 use super::board::Board;
 
 pub fn choose_first_open_spot(board: &Board) -> uint {
-    for n in range(0, 9u) {
+    for n in range(0, board.cell_count()) {
         if board.cells[n] == None {
             return n;
         }
@@ -34,17 +34,12 @@ mod test {
     #[should_fail]
     fn fails_if_no_open_spots() {
         let mut board: Board = Board::new();
+        let count = board.cell_count();
         {
             let cells = board.cells.as_mut_slice();
-            cells[0] = Some(X);
-            cells[1] = Some(X);
-            cells[2] = Some(O);
-            cells[3] = Some(O);
-            cells[4] = Some(O);
-            cells[5] = Some(X);
-            cells[6] = Some(X);
-            cells[7] = Some(X);
-            cells[8] = Some(O);
+            for n in range(0, count) {
+                cells[n] = Some(X);
+            }
         }
         choose_first_open_spot(&board);
     }

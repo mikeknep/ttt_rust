@@ -1,8 +1,8 @@
 use super::super::core::board::{Board, X, O};
 
 pub fn display_board(board: &Board) {
-    for n in range(0, 9u) {
-        let separator = match n % 3 {
+    for n in range(0, board.cell_count()) {
+        let separator = match n % board.length() {
             0 => "\n",
             _ => "|"
         };

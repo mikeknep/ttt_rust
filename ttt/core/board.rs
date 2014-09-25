@@ -1,3 +1,5 @@
+static BOARD_SIZE: uint = 9u;
+
 #[deriving(PartialEq)]
 pub enum Token {
     X, O
@@ -9,7 +11,16 @@ pub struct Board {
 
 impl Board {
     pub fn new() -> Board {
-        Board { cells: [None, ..9] }
+        Board { cells: [None, ..BOARD_SIZE] }
+    }
+
+    pub fn length(&self) -> uint {
+        let size = BOARD_SIZE as f64;
+        size.sqrt() as uint
+    }
+
+    pub fn cell_count(&self) -> uint {
+        BOARD_SIZE
     }
 }
 

@@ -53,7 +53,7 @@ fn opposite_token(token: Token) -> Token {
 
 fn collect_open_cells(board: &Board) -> Vec<uint> {
     let mut open_cells = vec![];
-    for n in range(0, 9u) {
+    for n in range(0, board.cell_count()) {
         if board.cells[n] == None {
             open_cells.push(n);
         }
@@ -90,9 +90,10 @@ mod test {
 
     fn new_board_with_layout(cell_layout: Vec<Option<Token>>) -> Board {
         let mut board: Board = Board::new();
+        let count: uint = board.cell_count();
         {
             let cells = board.cells.as_mut_slice();
-            for n in range(0, 9u) {
+            for n in range(0, count) {
                 cells[n] = *cell_layout.get(n);
             }
         }

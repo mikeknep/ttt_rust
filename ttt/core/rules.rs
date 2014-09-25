@@ -1,4 +1,4 @@
-use super::board::{Board, Token};
+use super::board::{Board, Token, X, O};
 use super::player::Player;
 
 pub fn current_player(cells: &[Option<Token>], p1: Player, p2: Player) -> Player {
@@ -9,8 +9,8 @@ pub fn current_player(cells: &[Option<Token>], p1: Player, p2: Player) -> Player
     }
 }
 
-pub fn is_valid_position(position: int, cells: &[Option<Token>]) -> bool {
-    position >= 0 && position <= 8 && cells[position as uint] == None
+pub fn is_valid_position(position: uint, board: &Board) -> bool {
+    position >= 0 && position < board.cell_count() && board.cells[position] == None
 }
 
 pub fn is_game_over(board: &Board) -> bool {
@@ -18,20 +18,40 @@ pub fn is_game_over(board: &Board) -> bool {
 }
 
 pub fn is_winner_on_board(board: &Board) -> bool {
-    let winning_paths = all_winning_paths();
+    let winning_paths = all_winning_paths(board.length());
     let mut iterable_paths = winning_paths.iter();
     iterable_paths.any(|path| is_winner_on_path(path, board))
 }
 
-fn all_winning_paths() -> Vec<[uint, ..3]> {
-    vec!([0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6])
+fn all_winning_paths(board_length: uint) -> Vec<Vec<uint>> {
+    let mut paths: Vec<Vec<uint>> = Vec::new();
+    for n in range(0, board_length) {
+        paths.push(Vec::from_fn(board_length, |idx| board_length * n + idx));
+        paths.push(Vec::from_fn(board_length, |idx| board_length * idx + n));
+    }
+    let (diagonal_1, diagonal_2) = diagonal_indexes(board_length);
+    paths.push(diagonal_1);
+    paths.push(diagonal_2);
+
+    paths
 }
 
-fn is_winner_on_path(path: &[uint, ..3], board: &Board) -> bool {
-    let token_1 = board.cells[path[0]];
-    let token_2 = board.cells[path[1]];
-    let token_3 = board.cells[path[2]];
-    token_1 == token_2 && token_2 == token_3 && token_3 != None
+fn diagonal_indexes(board_length: uint) -> (Vec<uint>, Vec<uint>) {
+    let mut diagonal_1 = Vec::new();
+    let mut diagonal_2 = Vec::new();
+    for n in range(0, board_length) {
+        diagonal_1.push((board_length - 1) * (n + 1));
+        diagonal_2.push((board_length + 1) * (n));
+    }
+    (diagonal_1, diagonal_2)
+}
+
+fn is_winner_on_path(path: &Vec<uint>, board: &Board) -> bool {
+    let mut spots = Vec::with_capacity(board.length());
+    for n in range(0, path.iter().count()) {
+        spots.push(board.cells[*path.get(n)]);
+    }
+    spots.iter().all(|spot| *spot == Some(X)) || spots.iter().all(|spot| *spot == Some(O))
 }
 
 fn is_full(board: &Board) -> bool {
@@ -46,7 +66,7 @@ fn is_full(board: &Board) -> bool {
 
 #[cfg(test)]
 mod test {
-    use super::{is_valid_position, is_game_over, current_player};
+    use super::{is_valid_position, is_game_over, current_player, all_winning_paths};
     use super::super::board::{Board, X, O};
     use super::super::player::Player;
 
@@ -66,8 +86,8 @@ mod test {
 
     #[test]
     fn index_out_of_bounds_is_invalid() {
-        let cells = [None, ..9];
-        assert!(is_valid_position(13, cells) == false);
+        let board: Board = Board::new();
+        assert!(is_valid_position(13, &board) == false);
     }
 
     #[test]
@@ -75,15 +95,24 @@ mod test {
         let mut board: Board = Board::new();
         { board.cells.as_mut_slice()[5] = Some(O); }
 
-        assert!(is_valid_position(5, board.cells.as_slice()) == false);
+        assert!(is_valid_position(5, &board) == false);
+    }
+
+    #[test]
+    fn spots_on_board_are_valid() {
+        let board: Board = Board::new();
+        for n in range(0u, board.cell_count()) {
+            assert!(is_valid_position(n, &board));
+        }
     }
 
     #[test]
     fn determines_game_over_when_board_full() {
         let mut board: Board = Board::new();
+        let count: uint = board.cell_count();
         {
             let cells = board.cells.as_mut_slice();
-            for n in range(0, 9u) {
+            for n in range(0, count) {
                 cells[n] = Some(X);
             }
         }
@@ -114,5 +143,10 @@ mod test {
         }
 
         assert!(is_game_over(&board) == false);
+    }
+
+    #[test]
+    fn returns_all_winning_paths_on_3_by_3_board() {
+        assert_eq!(all_winning_paths(3u), vec!(vec!(0,1,2), vec!(0,3,6), vec!(3,4,5), vec!(1,4,7), vec!(6,7,8), vec!(2,5,8), vec!(2,4,6), vec!(0,4,8)));
     }
 }
