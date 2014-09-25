@@ -14,10 +14,6 @@ impl Player {
         let dm = self.decision_maker;
         dm(board, self.token)
     }
-
-    pub fn eq(&self, other: &Player) -> bool {
-        self.token == other.token
-    }
 }
 
 
@@ -28,8 +24,7 @@ mod test {
     use super::Player;
     use super::super::board::{Board, Token, O};
 
-    #[allow(unused_variable)]
-    fn mock_decision_maker(board: &Board, token: Token) -> uint {
+    fn mock_decision_maker(_board: &Board, _token: Token) -> uint {
         4u
     }
 

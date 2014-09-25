@@ -10,7 +10,7 @@ pub fn current_player(cells: &[Option<Token>], p1: Player, p2: Player) -> Player
 }
 
 pub fn is_valid_position(position: uint, board: &Board) -> bool {
-    position >= 0 && position < board.cell_count() && board.cells[position] == None
+    position < board.cell_count() && board.cells[position] == None
 }
 
 pub fn is_game_over(board: &Board) -> bool {
@@ -70,8 +70,7 @@ mod test {
     use super::super::board::{Board, Token, X, O};
     use super::super::player::Player;
 
-    #[allow(unused_variable)]
-    fn mock_decision_maker(board: &Board, token: Token) -> uint {
+    fn mock_decision_maker(_board: &Board, _token: Token) -> uint {
         4u
     }
 
@@ -81,7 +80,7 @@ mod test {
         let p1: Player = Player::new(X, mock_decision_maker);
         let p2: Player = Player::new(O, mock_decision_maker);
 
-        assert!(current_player(board.cells, p1, p2).eq(&p1));
+        assert!(current_player(board.cells, p1, p2).token == X);
     }
 
     #[test]
@@ -96,6 +95,12 @@ mod test {
         { board.cells.as_mut_slice()[5] = Some(O); }
 
         assert!(is_valid_position(5, &board) == false);
+    }
+
+    #[test]
+    fn negative_index_is_invalid() {
+        let board: Board = Board::new();
+        assert!(is_valid_position(-1, &board) == false);
     }
 
     #[test]

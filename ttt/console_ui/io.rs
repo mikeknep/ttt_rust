@@ -2,7 +2,7 @@ use std::io;
 use super::super::core::board::{Board, Token};
 use super::super::core::rules::is_valid_position;
 
-pub fn get_next_move(board: &Board, token: Token) -> uint {
+pub fn get_next_move(board: &Board, _token: Token) -> uint {
     println!("Where do you want to play?");
     let mut reader = io::stdin();
     loop {

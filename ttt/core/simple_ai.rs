@@ -1,6 +1,6 @@
 use super::board::{Board, Token};
 
-pub fn choose_first_available_cell(board: &Board, token: Token) -> uint {
+pub fn choose_first_available_cell(board: &Board, _token: Token) -> uint {
     for n in range(0, board.cell_count()) {
         if board.cells[n] == None {
             return n;

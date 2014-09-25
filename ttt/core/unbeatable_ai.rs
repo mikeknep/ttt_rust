@@ -63,7 +63,7 @@ fn collect_open_cells(board: &Board) -> Vec<uint> {
 }
 
 fn get_highest_scored_cell(scores: Vec<(uint, f64)>) -> uint {
-    let mut best_tuple = (-1u, -2f64);
+    let mut best_tuple = (0u, -2f64);
     for &tuple in scores.iter() {
         if tuple.val1() > best_tuple.val1() {
             best_tuple = tuple;
