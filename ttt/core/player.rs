@@ -1,4 +1,4 @@
-use super::board::{Token, Board};
+use super::board::{Token, Board, X, O};
 
 pub struct Player {
     pub token: Token,
@@ -8,6 +8,14 @@ pub struct Player {
 impl Player {
     pub fn new(token: Token, decision_maker: fn(&Board, Token) -> uint) -> Player {
         Player { token: token, decision_maker: decision_maker }
+    }
+
+    pub fn new_player_1(decision_maker: fn(&Board, Token) -> uint) -> Player {
+        Player { token: X, decision_maker: decision_maker }
+    }
+
+    pub fn new_player_2(decision_maker: fn(&Board, Token) -> uint) -> Player {
+        Player { token: O, decision_maker: decision_maker }
     }
 
     pub fn choose_next_move(&self, board: &Board) -> uint {
@@ -22,10 +30,22 @@ impl Player {
 #[cfg(test)]
 mod test {
     use super::Player;
-    use super::super::board::{Board, Token, O};
+    use super::super::board::{Board, Token, X, O};
 
     fn mock_decision_maker(_board: &Board, _token: Token) -> uint {
         4u
+    }
+
+    #[test]
+    fn creates_player_1() {
+        let player_1: Player = Player::new_player_1(mock_decision_maker);
+        assert!(player_1.token == X);
+    }
+
+    #[test]
+    fn creates_player_2() {
+        let player_2: Player = Player::new_player_2(mock_decision_maker);
+        assert!(player_2.token == O);
     }
 
     #[test]
