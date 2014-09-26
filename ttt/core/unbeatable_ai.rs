@@ -1,7 +1,7 @@
 use std::num;
 use std::comm;
 use super::board::{Board, Token, X, O};
-use super::rules::{is_winner_on_board, is_game_over};
+use super::rules;
 
 pub fn choose_best_available_cell(board: &Board, token: Token) -> uint {
     let open_cells = collect_open_cells(board);
@@ -29,7 +29,7 @@ fn score_cell(cell_index: uint, board: &Board, token: Token, depth: uint) -> f64
         super::gameplay_executor::execute_turn(cells, cell_index, Some(token));
     }
 
-    if is_game_over(&deref_board) {
+    if rules::is_game_over(&deref_board) {
         score_board(&deref_board, depth)
     } else {
         let mut comp_score = num::pow(-1f64, depth + 1u);
@@ -73,7 +73,7 @@ fn get_highest_scored_cell(scores: Vec<(uint, f64)>) -> uint {
 }
 
 fn score_board(board: &Board, depth: uint) -> f64 {
-    if is_winner_on_board(board) {
+    if rules::is_winner_on_board(board) {
         num::pow(-1f64, depth + 1u) / depth as f64
     } else {
         0f64
