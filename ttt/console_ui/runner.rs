@@ -9,8 +9,7 @@ pub fn start_playing_session() {
     while play_game {
         let (mut board, player_1, player_2) = setup::new_game();
         run_game(&mut board, player_1, player_2);
-        presenter::display_board(&board);
-        println!("Game over!");
+        presenter::present_outcome(&board);
         play_game = io::get_play_again();
     }
 }

@@ -55,7 +55,7 @@ fn opposite_token(token: Token) -> Token {
 fn collect_open_cells(board: &Board) -> Vec<uint> {
     let mut open_cells = vec![];
     for n in range(0, board.cell_count()) {
-        if board.cells[n] == None {
+        if board.cells[n].is_none() {
             open_cells.push(n);
         }
     }

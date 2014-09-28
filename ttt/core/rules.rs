@@ -2,15 +2,24 @@ use super::board::{Board, Token, X, O};
 use super::player::Player;
 
 pub fn current_player(cells: &[Option<Token>], p1: Player, p2: Player) -> Player {
-    let mut played_cells = cells.iter().filter(|&cell| *cell != None);
+    let mut played_cells = cells.iter().filter(|cell| cell.is_some());
     match played_cells.count() % 2 {
         0 => p1,
         _ => p2
     }
 }
 
+pub fn winning_token(board: &Board) -> Token {
+    assert!(is_winner_on_board(board));
+    let mut played_cells = board.cells.iter().filter(|cell| cell.is_some());
+    match played_cells.count() % 2 {
+        0 => O,
+        _ => X
+    }
+}
+
 pub fn is_valid_position(position: uint, board: &Board) -> bool {
-    position < board.cell_count() && board.cells[position] == None
+    position < board.cell_count() && board.cells[position].is_none()
 }
 
 pub fn is_game_over(board: &Board) -> bool {
@@ -56,7 +65,7 @@ fn is_winner_on_path(path: &Vec<uint>, board: &Board) -> bool {
 
 fn is_full(board: &Board) -> bool {
     let mut cells = board.cells.iter();
-    !cells.any(|cell| *cell == None)
+    !cells.any(|cell| cell.is_none())
 }
 
 
@@ -66,7 +75,7 @@ fn is_full(board: &Board) -> bool {
 
 #[cfg(test)]
 mod test {
-    use super::{is_valid_position, is_game_over, current_player, all_winning_paths};
+    use super::{is_valid_position, is_game_over, is_full, is_winner_on_board, is_winner_on_path, current_player, all_winning_paths};
     use super::super::board::{Board, Token, X, O};
     use super::super::player::Player;
 
@@ -122,19 +131,23 @@ mod test {
             }
         }
 
+        assert!(is_full(&board));
         assert!(is_game_over(&board));
     }
 
     #[test]
     fn determines_game_over_when_player_wins() {
         let mut board: Board = Board::new();
+        let path = vec![0,4,8];
         {
             let cells = board.cells.as_mut_slice();
-            cells[0] = Some(X);
-            cells[4] = Some(X);
-            cells[8] = Some(X);
+            for &n in path.iter() {
+                cells[n] = Some(X);
+            }
         }
 
+        assert!(is_winner_on_path(&path, &board));
+        assert!(is_winner_on_board(&board));
         assert!(is_game_over(&board));
     }
 

@@ -1,6 +1,6 @@
 static BOARD_SIZE: uint = 9u;
 
-#[deriving(PartialEq)]
+#[deriving(PartialEq, Show)]
 pub enum Token {
     X, O
 }
@@ -35,7 +35,7 @@ mod test {
         let board: Board = Board::new();
         let mut cells = board.cells.iter();
 
-        assert!(cells.all(|cell| *cell == None));
+        assert!(cells.all(|cell| cell.is_none()));
     }
 
     #[test]
