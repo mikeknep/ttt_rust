@@ -30,3 +30,17 @@ pub fn get_player_decision_maker(player_number: uint) -> fn(&Board, Token) -> ui
         };
     }
 }
+
+pub fn get_play_again() -> bool {
+    println!("Do you want to play again? (y)es / (n)o");
+    let mut reader = io::stdin();
+    loop {
+        let input = reader.read_line().ok().expect("There was a problem reading your input.");
+        let input_char: &str = input.as_slice().trim();
+        match input_char {
+            "y" => return true,
+            "n" => return false,
+            _ => println!("That is not a valid response. Please enter \"y\" to play again or \"n\" to exit.")
+        };
+    }
+}
