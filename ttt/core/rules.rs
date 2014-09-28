@@ -75,21 +75,38 @@ fn is_full(board: &Board) -> bool {
 
 #[cfg(test)]
 mod test {
-    use super::{is_valid_position, is_game_over, is_full, is_winner_on_board, is_winner_on_path, current_player, all_winning_paths};
-    use super::super::board::{Board, Token, X, O};
+    use super::{is_valid_position, is_game_over, is_full, is_winner_on_board, is_winner_on_path, current_player, winning_token, all_winning_paths};
+    use super::super::board::{Board, X, O};
     use super::super::player::Player;
-
-    fn mock_decision_maker(_board: &Board, _token: Token) -> uint {
-        4u
-    }
+    use super::super::test_helpers;
 
     #[test]
     fn recognizes_player_1_as_current_player() {
         let board: Board = Board::new();
-        let p1: Player = Player::new(X, mock_decision_maker);
-        let p2: Player = Player::new(O, mock_decision_maker);
+        let p1: Player = Player::new(X, test_helpers::mock_decision_maker);
+        let p2: Player = Player::new(O, test_helpers::mock_decision_maker);
 
         assert!(current_player(board.cells, p1, p2).token == X);
+    }
+
+    #[test]
+    fn returns_correct_winning_token_x() {
+        let board: Board = test_helpers::new_board_with_layout(
+            vec!(Some(X), Some(X), Some(X),
+                 None   , None   , None   ,
+                 Some(O), Some(O), None   ));
+
+        assert!(winning_token(&board) == X);
+    }
+
+    #[test]
+    fn returns_correct_winning_token_o() {
+        let board: Board = test_helpers::new_board_with_layout(
+            vec!(Some(X), Some(X), None   ,
+                 Some(X), None   , None   ,
+                 Some(O), Some(O), Some(O)));
+
+        assert!(winning_token(&board) == O);
     }
 
     #[test]
@@ -122,14 +139,10 @@ mod test {
 
     #[test]
     fn determines_game_over_when_board_full() {
-        let mut board: Board = Board::new();
-        let count: uint = board.cell_count();
-        {
-            let cells = board.cells.as_mut_slice();
-            for n in range(0, count) {
-                cells[n] = Some(X);
-            }
-        }
+        let board: Board = test_helpers::new_board_with_layout(
+            vec!(Some(O), Some(X), Some(X),
+                 Some(X), Some(O), Some(O),
+                 Some(O), Some(X), Some(X)));
 
         assert!(is_full(&board));
         assert!(is_game_over(&board));
@@ -137,14 +150,11 @@ mod test {
 
     #[test]
     fn determines_game_over_when_player_wins() {
-        let mut board: Board = Board::new();
-        let path = vec![0,4,8];
-        {
-            let cells = board.cells.as_mut_slice();
-            for &n in path.iter() {
-                cells[n] = Some(X);
-            }
-        }
+        let path = vec!(0,1,2);
+        let board: Board = test_helpers::new_board_with_layout(
+            vec!(Some(X), Some(X), Some(X),
+                 None   , None   , None   ,
+                 Some(O), Some(O), None   ));
 
         assert!(is_winner_on_path(&path, &board));
         assert!(is_winner_on_board(&board));

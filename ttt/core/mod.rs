@@ -4,4 +4,6 @@ pub mod player;
 pub mod simple_ai;
 pub mod unbeatable_ai;
 pub mod rules;
-pub mod setup;
+
+#[cfg(test)]
+pub mod test_helpers;
