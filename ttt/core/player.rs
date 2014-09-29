@@ -6,10 +6,6 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(token: Token, decision_maker: fn(&Board, Token) -> uint) -> Player {
-        Player { token: token, decision_maker: decision_maker }
-    }
-
     pub fn new_player_1(decision_maker: fn(&Board, Token) -> uint) -> Player {
         Player { token: X, decision_maker: decision_maker }
     }
@@ -48,7 +44,7 @@ mod test {
 
     #[test]
     fn choosing_next_move_returns_cell_index() {
-        let player: Player = Player::new(O, test_helpers::mock_decision_maker);
+        let player: Player = Player::new_player_1(test_helpers::mock_decision_maker);
         let board = Board::new();
 
         assert!(player.choose_next_move(&board) == 4u);

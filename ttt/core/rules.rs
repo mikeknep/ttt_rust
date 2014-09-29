@@ -83,8 +83,8 @@ mod test {
     #[test]
     fn recognizes_player_1_as_current_player() {
         let board: Board = Board::new();
-        let p1: Player = Player::new(X, test_helpers::mock_decision_maker);
-        let p2: Player = Player::new(O, test_helpers::mock_decision_maker);
+        let p1: Player = Player::new_player_1(test_helpers::mock_decision_maker);
+        let p2: Player = Player::new_player_2(test_helpers::mock_decision_maker);
 
         assert!(current_player(board.cells, p1, p2).token == X);
     }
