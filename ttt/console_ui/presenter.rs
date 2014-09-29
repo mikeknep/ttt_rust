@@ -1,7 +1,7 @@
 use super::super::core::board::Board;
 use super::super::core::rules;
 
-pub fn display_board(board: &Board) {
+pub fn present_board(board: &Board) {
     for n in range(0, board.cell_count()) {
         let separator = match n % board.length() {
             0 => "\n",
@@ -20,7 +20,7 @@ pub fn display_board(board: &Board) {
 }
 
 pub fn present_outcome(board: &Board) {
-    display_board(board);
+    present_board(board);
     if rules::is_winner_on_board(board) {
         println!("{} wins!", rules::winning_token(board));
     } else {

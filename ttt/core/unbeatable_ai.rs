@@ -23,19 +23,19 @@ pub fn choose_best_available_cell(board: &Board, token: Token) -> uint {
 }
 
 fn score_cell(cell_index: uint, board: &Board, token: Token, depth: uint) -> f64 {
-    let mut deref_board = *board;
+    let mut board = *board;
     {
-        let cells = deref_board.cells.as_mut_slice();
+        let cells = board.cells.as_mut_slice();
         super::gameplay_executor::execute_turn(cells, cell_index, Some(token));
     }
 
-    if rules::is_game_over(&deref_board) {
-        score_board(&deref_board, depth)
+    if rules::is_game_over(&board) {
+        score_board(&board, depth)
     } else {
         let mut comp_score = num::pow(-1f64, depth + 1u);
-        let new_open_cells = collect_open_cells(&deref_board);
+        let new_open_cells = collect_open_cells(&board);
         for &cell_index in new_open_cells.iter() {
-            let cell_score = score_cell(cell_index, &deref_board, opposite_token(token), depth + 1u);
+            let cell_score = score_cell(cell_index, &board, opposite_token(token), depth + 1u);
             if should_update_score(cell_score, comp_score, depth) {
                 comp_score = cell_score
             }
@@ -63,13 +63,13 @@ fn collect_open_cells(board: &Board) -> Vec<uint> {
 }
 
 fn get_highest_scored_cell(scores: Vec<(uint, f64)>) -> uint {
-    let mut best_tuple = (0u, -2f64);
-    for &tuple in scores.iter() {
-        if tuple.val1() > best_tuple.val1() {
-            best_tuple = tuple;
+    let mut best_cell_and_score = (0u, -2f64);
+    for &cell_and_score in scores.iter() {
+        if cell_and_score.val1() > best_cell_and_score.val1() {
+            best_cell_and_score = cell_and_score;
         }
     }
-    best_tuple.val0()
+    best_cell_and_score.val0()
 }
 
 fn score_board(board: &Board, depth: uint) -> f64 {

@@ -27,9 +27,9 @@ pub fn is_game_over(board: &Board) -> bool {
 }
 
 pub fn is_winner_on_board(board: &Board) -> bool {
-    let winning_paths = all_winning_paths(board.length());
-    let mut iterable_paths = winning_paths.iter();
-    iterable_paths.any(|path| is_winner_on_path(path, board))
+    let all_winning_paths = all_winning_paths(board.length());
+    let mut paths = all_winning_paths.iter();
+    paths.any(|path| is_winner_on_path(path, board))
 }
 
 fn all_winning_paths(board_length: uint) -> Vec<Vec<uint>> {
@@ -56,11 +56,12 @@ fn diagonal_indexes(board_length: uint) -> (Vec<uint>, Vec<uint>) {
 }
 
 fn is_winner_on_path(path: &Vec<uint>, board: &Board) -> bool {
-    let mut spots = Vec::with_capacity(board.length());
+    let mut tokens = Vec::with_capacity(board.length());
     for n in range(0, path.iter().count()) {
-        spots.push(board.cells[*path.get(n)]);
+        let &cell_index = path.get(n);
+        tokens.push(board.cells[cell_index]);
     }
-    spots.iter().all(|spot| *spot == Some(X)) || spots.iter().all(|spot| *spot == Some(O))
+    tokens.iter().all(|token| *token == Some(X)) || tokens.iter().all(|token| *token == Some(O))
 }
 
 fn is_full(board: &Board) -> bool {
