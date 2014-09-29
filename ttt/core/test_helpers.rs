@@ -1,4 +1,3 @@
-#[cfg(test)]
 use super::board::{Board, Token};
 
 pub fn new_board_with_layout(cell_layout: Vec<Option<Token>>) -> Board {

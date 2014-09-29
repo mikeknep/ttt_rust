@@ -1,6 +1,6 @@
-use super::board::Board;
-use super::player::Player;
-use super::super::console_ui::io;
+use super::super::core::board::Board;
+use super::super::core::player::Player;
+use super::io;
 
 pub fn new_game() -> (Board, Player, Player) {
     let player_1_decision_maker = io::get_player_decision_maker(1u);

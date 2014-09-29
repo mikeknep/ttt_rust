@@ -1,7 +1,7 @@
 use super::super::core::board::Board;
 use super::super::core::player::Player;
-use super::super::core::{rules, gameplay_executor, setup};
-use super::{presenter, io};
+use super::super::core::{rules, gameplay_executor};
+use super::{presenter, io, setup};
 
 pub fn start_playing_session() {
     println!("Let's play Tic-Tac-Toe!");
