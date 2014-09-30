@@ -1,3 +1,4 @@
+use std::io::stdin;
 use super::super::core::board::Board;
 use super::super::core::player::Player;
 use super::super::core::{rules, gameplay_executor};
@@ -10,7 +11,7 @@ pub fn start_playing_session() {
         let (mut board, player_1, player_2) = setup::new_game();
         run_game(&mut board, player_1, player_2);
         presenter::present_outcome(&board);
-        play_game = io::get_play_again();
+        play_game = io::get_play_again(&mut stdin());
     }
     println!("Thanks for playing!");
 }
