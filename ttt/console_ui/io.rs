@@ -44,3 +44,35 @@ pub fn get_play_again<R: Buffer>(reader: &mut R) -> bool {
 fn get_input<R: Buffer>(reader: &mut R) -> String {
     reader.read_line().ok().expect("There was a problem reading your input.")
 }
+
+
+
+#[cfg(test)]
+mod test {
+    use std::io::BufReader;
+    use super::get_play_again;
+
+    #[test]
+    fn returns_true_for_play_again_y_input() {
+        let mut reader = BufReader::new(b"y\n");
+        let play_again = get_play_again(&mut reader);
+
+        assert!(play_again);
+    }
+
+    #[test]
+    fn returns_false_for_play_again_n_input() {
+        let mut reader = BufReader::new(b"n\n");
+        let play_again = get_play_again(&mut reader);
+
+        assert!(play_again == false);
+    }
+
+    #[test]
+    fn loops_without_blowing_up_until_valid_play_again_input() {
+        let mut reader = BufReader::new(b"foo\nbar\ny\n");
+        let play_again = get_play_again(&mut reader);
+
+        assert!(play_again);
+    }
+}
