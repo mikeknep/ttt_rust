@@ -1,6 +1,6 @@
 use super::board::{Board, Token};
 
-pub fn choose_first_available_cell(board: &Board, _token: Token) -> uint {
+pub fn choose_first_available_cell(board: &Board, _tokens: (Token,Token)) -> uint {
     for n in range(0, board.cell_count()) {
         if board.cells[n].is_none() {
             return n;
@@ -27,7 +27,7 @@ mod test {
             cells[1] = Some(O);
         }
 
-        assert!(choose_first_available_cell(&board, X) == 2u);
+        assert!(choose_first_available_cell(&board, (X,O)) == 2u);
     }
 
     #[test]
@@ -41,6 +41,6 @@ mod test {
                 cells[n] = Some(X);
             }
         }
-        choose_first_available_cell(&board, O);
+        choose_first_available_cell(&board, (O,X));
     }
 }

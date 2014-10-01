@@ -12,6 +12,6 @@ pub fn new_board_with_layout(cell_layout: Vec<Option<Token>>) -> Board {
     board
 }
 
-pub fn mock_decision_maker(_board: &Board, _token: Token) -> uint {
+pub fn mock_decision_maker(_board: &Board, _tokens: (Token,Token)) -> uint {
     4u
 }

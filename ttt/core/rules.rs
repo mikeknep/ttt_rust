@@ -1,11 +1,11 @@
 use super::board::{Board, Token, X, O};
 use super::player::Player;
 
-pub fn current_player(cells: &[Option<Token>], p1: Player, p2: Player) -> Player {
+pub fn current_player_and_opponent(cells: &[Option<Token>], p1: Player, p2: Player) -> (Player, Player) {
     let mut played_cells = cells.iter().filter(|cell| cell.is_some());
     match played_cells.count() % 2 {
-        0 => p1,
-        _ => p2
+        0 => (p1, p2),
+        _ => (p2, p1)
     }
 }
 
@@ -76,18 +76,34 @@ fn is_full(board: &Board) -> bool {
 
 #[cfg(test)]
 mod test {
-    use super::{is_valid_position, is_game_over, is_full, is_winner_on_board, is_winner_on_path, current_player, winning_token, all_winning_paths};
+    use super::{is_valid_position, is_game_over, is_full, is_winner_on_board, is_winner_on_path, current_player_and_opponent, winning_token, all_winning_paths};
     use super::super::board::{Board, X, O};
     use super::super::player::Player;
     use super::super::test_helpers;
 
     #[test]
-    fn recognizes_player_1_as_current_player() {
+    fn recognizes_player_1_as_current_player_on_empty_board() {
         let board: Board = Board::new();
         let p1: Player = Player::new_player_1(test_helpers::mock_decision_maker);
         let p2: Player = Player::new_player_2(test_helpers::mock_decision_maker);
+        let (player1, player2) = current_player_and_opponent(board.cells, p1, p2);
 
-        assert!(current_player(board.cells, p1, p2).token == X);
+        assert!(p1.token == player1.token);
+        assert!(p2.token == player2.token);
+    }
+
+    #[test]
+    fn recognizes_player_2_as_current_player_on_in_progress_board() {
+        let board: Board = test_helpers::new_board_with_layout(
+            vec!(Some(X), Some(X), Some(O),
+                 Some(O), Some(X), Some(O),
+                 Some(X), None   , None   ));
+        let p1: Player = Player::new_player_1(test_helpers::mock_decision_maker);
+        let p2: Player = Player::new_player_2(test_helpers::mock_decision_maker);
+        let (player2, player1) = current_player_and_opponent(board.cells, p1, p2);
+
+        assert!(p1.token == player1.token);
+        assert!(p2.token == player2.token);
     }
 
     #[test]

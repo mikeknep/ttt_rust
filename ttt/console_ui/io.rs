@@ -2,7 +2,7 @@ use std::io;
 use super::super::core::board::{Board, Token};
 use super::super::core::{rules, simple_ai, unbeatable_ai};
 
-pub fn get_next_move(board: &Board, _token: Token) -> uint {
+pub fn get_next_move(board: &Board, _tokens: (Token,Token)) -> uint {
     println!("Where do you want to play?");
     loop {
         let reader = &mut io::stdin();
@@ -16,7 +16,7 @@ pub fn get_next_move(board: &Board, _token: Token) -> uint {
 }
 
 
-pub fn get_player_decision_maker<R: Buffer>(player_number: uint, reader: &mut R) -> fn(&Board, Token) -> uint {
+pub fn get_player_decision_maker<R: Buffer>(player_number: uint, reader: &mut R) -> fn(&Board, (Token,Token)) -> uint {
     println!("What type of player is player {}? (h)uman, (e)asy computer, or (d)ifficult computer", player_number);
     loop {
         let mut input = get_input(reader);

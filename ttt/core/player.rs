@@ -2,21 +2,21 @@ use super::board::{Token, Board, X, O};
 
 pub struct Player {
     pub token: Token,
-    decision_maker: fn(&Board, Token) -> uint
+    decision_maker: fn(&Board, (Token,Token)) -> uint
 }
 
 impl Player {
-    pub fn new_player_1(decision_maker: fn(&Board, Token) -> uint) -> Player {
+    pub fn new_player_1(decision_maker: fn(&Board, (Token,Token)) -> uint) -> Player {
         Player { token: X, decision_maker: decision_maker }
     }
 
-    pub fn new_player_2(decision_maker: fn(&Board, Token) -> uint) -> Player {
+    pub fn new_player_2(decision_maker: fn(&Board, (Token,Token)) -> uint) -> Player {
         Player { token: O, decision_maker: decision_maker }
     }
 
-    pub fn choose_next_move(&self, board: &Board) -> uint {
+    pub fn choose_next_move(&self, board: &Board, tokens: (Token,Token)) -> uint {
         let dm = self.decision_maker;
-        dm(board, self.token)
+        dm(board, tokens)
     }
 }
 
@@ -47,6 +47,6 @@ mod test {
         let player: Player = Player::new_player_1(test_helpers::mock_decision_maker);
         let board = Board::new();
 
-        assert!(player.choose_next_move(&board) == 4u);
+        assert!(player.choose_next_move(&board, (X,O)) == 4u);
     }
 }

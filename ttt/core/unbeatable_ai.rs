@@ -1,16 +1,16 @@
 use std::num;
 use std::comm;
-use super::board::{Board, Token, X, O};
+use super::board::{Board, Token};
 use super::rules;
 
-pub fn choose_best_available_cell(board: &Board, token: Token) -> uint {
+pub fn choose_best_available_cell(board: &Board, tokens: (Token, Token)) -> uint {
     let open_cells = collect_open_cells(board);
     let (tx, rx) = comm::channel();
     for &cell_index in open_cells.iter() {
         let task_tx = tx.clone();
         let board_ = *board;
         spawn(proc() {
-            let cell_score = score_cell(cell_index, &board_, token, 1);
+            let cell_score = score_cell(cell_index, &board_, tokens, 1);
             task_tx.send((cell_index, cell_score));
         });
     }
@@ -22,11 +22,11 @@ pub fn choose_best_available_cell(board: &Board, token: Token) -> uint {
     get_highest_scored_cell(scores)
 }
 
-fn score_cell(cell_index: uint, board: &Board, token: Token, depth: uint) -> f64 {
+fn score_cell(cell_index: uint, board: &Board, tokens: (Token, Token), depth: uint) -> f64 {
     let mut board = *board;
     {
         let cells = board.cells.as_mut_slice();
-        super::gameplay_executor::execute_turn(cells, cell_index, Some(token));
+        super::gameplay_executor::execute_turn(cells, cell_index, tokens.val0());
     }
 
     if rules::is_game_over(&board) {
@@ -35,7 +35,7 @@ fn score_cell(cell_index: uint, board: &Board, token: Token, depth: uint) -> f64
         let mut comp_score = num::pow(-1f64, depth + 1u);
         let new_open_cells = collect_open_cells(&board);
         for &cell_index in new_open_cells.iter() {
-            let cell_score = score_cell(cell_index, &board, opposite_token(token), depth + 1u);
+            let cell_score = score_cell(cell_index, &board, swap_tokens(tokens), depth + 1u);
             if should_update_score(cell_score, comp_score, depth) {
                 comp_score = cell_score
             }
@@ -48,8 +48,9 @@ fn should_update_score(cell_score: f64, comp_score: f64, depth: uint) -> bool {
     (depth % 2 == 0 && cell_score > comp_score) || (depth % 2 == 1 && cell_score < comp_score)
 }
 
-fn opposite_token(token: Token) -> Token {
-    if token == X { O } else { X }
+fn swap_tokens(tokens: (Token, Token)) -> (Token, Token) {
+    let (current_token, opponent_token) = tokens;
+    (opponent_token, current_token)
 }
 
 fn collect_open_cells(board: &Board) -> Vec<uint> {
@@ -98,7 +99,7 @@ mod test {
                  Some(O), Some(X), Some(X),
                  Some(X), Some(O), Some(O)));
 
-        assert_eq!(choose_best_available_cell(&board, X), 0u);
+        assert_eq!(choose_best_available_cell(&board, (X,O)), 0u);
     }
 
     #[test]
@@ -108,7 +109,7 @@ mod test {
                  Some(O), Some(X), Some(X),
                  Some(O), Some(X), None   ));
 
-        assert_eq!(choose_best_available_cell(&board, X), 8u);
+        assert_eq!(choose_best_available_cell(&board, (X,O)), 8u);
     }
 
     #[test]
@@ -118,7 +119,7 @@ mod test {
                  Some(O), Some(X), None   ,
                  Some(X), Some(O), None   ));
 
-        assert_eq!(choose_best_available_cell(&board, X), 8u);
+        assert_eq!(choose_best_available_cell(&board, (X,O)), 8u);
     }
 
     #[test]
@@ -128,7 +129,7 @@ mod test {
                  Some(O), Some(X), Some(O),
                  Some(X), Some(X), None   ));
 
-        assert_eq!(choose_best_available_cell(&board, O), 8u);
+        assert_eq!(choose_best_available_cell(&board, (O,X)), 8u);
     }
 
     #[test]
@@ -138,7 +139,7 @@ mod test {
                  Some(X), Some(O), None   ,
                  Some(O), None   , None   ));
 
-        assert_eq!(choose_best_available_cell(&board, X), 7u);
+        assert_eq!(choose_best_available_cell(&board, (X,O)), 7u);
     }
 
     #[test]
@@ -148,7 +149,7 @@ mod test {
                  None   , Some(X), None   ,
                  None   , None   , None   ));
 
-        assert_eq!(choose_best_available_cell(&board, O), 7u);
+        assert_eq!(choose_best_available_cell(&board, (O,X)), 7u);
     }
 
     #[test]
