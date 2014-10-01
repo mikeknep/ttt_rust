@@ -8,7 +8,7 @@ pub fn start_playing_session() {
     println!("Let's play Tic-Tac-Toe!");
     let mut play_game = true;
     while play_game {
-        let (mut board, player_1, player_2) = setup::new_game();
+        let (mut board, player_1, player_2) = setup::new_game(&mut stdin());
         run_game(&mut board, player_1, player_2);
         presenter::present_outcome(&board);
         play_game = io::get_play_again(&mut stdin());
