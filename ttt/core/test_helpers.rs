@@ -6,7 +6,7 @@ pub fn new_board_with_layout(cell_layout: Vec<Option<Token>>) -> Board {
     {
         let cells = board.cells.as_mut_slice();
         for n in range(0, count) {
-            cells[n] = *cell_layout.get(n);
+            cells[n] = cell_layout[n];
         }
     }
     board

@@ -58,7 +58,7 @@ fn diagonal_indexes(board_length: uint) -> (Vec<uint>, Vec<uint>) {
 fn is_winner_on_path(path: &Vec<uint>, board: &Board) -> bool {
     let mut tokens = Vec::with_capacity(board.length());
     for n in range(0, path.iter().count()) {
-        let &cell_index = path.get(n);
+        let cell_index = path[n];
         tokens.push(board.cells[cell_index]);
     }
     tokens.iter().all(|token| *token == Some(X)) || tokens.iter().all(|token| *token == Some(O))

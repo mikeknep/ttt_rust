@@ -1,10 +1,10 @@
 # Tic-Tac-Toe in Rust
-**or, _rusTTT_**
+**Rust version: 0.12**
 
 
 ## Installing Rust
 
-Rust is changing rapidly--a new 0.x version has been released every three months quite regularly for the past couple years. This code was written using Rust 0.11, but history suggests 0.12 is just around the corner. Given Rust has not yet reached a 1.0 version and significant decisions are still being made about the language, not every release is backwards-compatible. Therefore, it is important you install the correct version (0.11).
+Rust is changing rapidly in pursuit of a 1.0 version, and given significant decisions are still being made about the language, not every release is backwards compatible. Be sure to check the current Rust version and the version on which this code has been confirmed to run (beneath the title, above).
 
 ### The simplest way - Homebrew
 
@@ -15,7 +15,7 @@ $ brew update
 $ brew info rust
 ```
 
-If you see "rust: stable 0.11.0, HEAD", proceed to install Rust via Homebrew:
+If the brew package matches the version above, proceed to install Rust via Homebrew:
 
 ```
 $ brew install rust
@@ -23,7 +23,7 @@ $ brew install rust
 
 ### The trickier way - from source
 
-If you prefer to install from source, cannot use Homebrew, or Homebrew has updated to Rust 0.12, visit the [release history page](https://github.com/rust-lang/rust/wiki/Doc-releases#0110) and download the appropriate 0.11.0 installation package for your system.
+If you prefer to install from source, cannot use Homebrew, or need to download an older version of Rust, visit the [release history page](https://github.com/rust-lang/rust/wiki/Doc-releases) and download the appropriate installation package.
 
 ### Confirm success
 
@@ -32,8 +32,6 @@ To confirm a successful installation (via either method), execute the following 
 ```
 $ rustc -v
 ```
-
-This should print "rustc 0.11.0".
 
 
 

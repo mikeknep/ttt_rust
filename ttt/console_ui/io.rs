@@ -20,7 +20,7 @@ pub fn get_player_decision_maker<R: Buffer>(player_number: uint, reader: &mut R)
     println!("What type of player is player {}? (h)uman, (e)asy computer, or (d)ifficult computer", player_number);
     loop {
         let mut input = get_input(reader);
-        match input.shift_char().unwrap() {
+        match input.remove(0).unwrap() {
             'h' => return get_next_move,
             'e' => return simple_ai::choose_first_available_cell,
             'd' => return unbeatable_ai::choose_best_available_cell,
@@ -33,7 +33,7 @@ pub fn get_play_again<R: Buffer>(reader: &mut R) -> bool {
     println!("Do you want to play again? (y)es / (n)o");
     loop {
         let mut input = get_input(reader);
-        match input.shift_char().unwrap() {
+        match input.remove(0).unwrap() {
             'y' => return true,
             'n' => return false,
              _  => println!("That is not a valid response. Please enter \"y\" to play again or \"n\" to exit.")
