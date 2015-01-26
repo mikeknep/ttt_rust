@@ -4,40 +4,17 @@
 
 ## Installing Rust
 
-Rust is changing rapidly in pursuit of a 1.0 version, and given significant decisions are still being made about the language, not every release is backwards compatible. Be sure to check the current Rust version and the version on which this code has been confirmed to run (beneath the title, above).
-
-### The simplest way - Homebrew
-
-Run the following commands to update Homebrew and check the latest version of Rust:
-
-```
-$ brew update
-$ brew info rust
-```
-
-If the brew package matches the version above, proceed to install Rust via Homebrew:
-
-```
-$ brew install rust
-```
-
-### The trickier way - from source
-
-If you prefer to install from source, cannot use Homebrew, or need to download an older version of Rust, visit the [release history page](https://github.com/rust-lang/rust/wiki/Doc-releases) and download the appropriate installation package.
-
-### Confirm success
-
-To confirm a successful installation (via either method), execute the following command:
-
-```
-$ rustc -v
-```
-
+This code was originally written using Rust 0.11.
+It has since been updated to version 0.12, but *has not yet been updated to Rust 1.0*.
+To install the correct version of Rust to run this code, visit the [release history page](https://github.com/rust-lang/rust/wiki/Doc-releases#0120) and download the appropriate installation package.
+I'd like to update this codebase to Rust 1.0, and have a WIP branch attempting to do so, but there were several significant changes to the language and it's not particularly high on my list of priorities, so don't hold your breath.
 
 
 ## Compiling and executing
 
-Rust ships with a compiler, `rustc`, that compiles Rust code into executable binaries. For convenience, rather than use `rustc` directly, I've added a custom Makefile with targets to compile, execute, and delete both test and production executables.
+Rust 0.12 ships with a compiler, `rustc`, that compiles Rust code into executable binaries.
+It does *not* ship with [Cargo](https://crates.io/), the as-of-1.0 official package manager for Rust.
+Again, I'd like to update this codebase to use Cargo, but for now there is a custom Makefile with targets to compile, execute, and delete both test and production executables.
 
 ### Running the tests
 
