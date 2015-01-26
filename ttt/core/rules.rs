@@ -1,4 +1,5 @@
-use super::board::{Board, Token, X, O};
+use super::board::{Board, Token};
+use super::board::Token::{X, O};
 use super::player::Player;
 
 pub fn current_player_and_opponent(cells: &[Option<Token>], p1: Player, p2: Player) -> (Player, Player) {
@@ -18,7 +19,7 @@ pub fn winning_token(board: &Board) -> Token {
     }
 }
 
-pub fn is_valid_position(position: uint, board: &Board) -> bool {
+pub fn is_valid_position(position: usize, board: &Board) -> bool {
     position < board.cell_count() && board.cells[position].is_none()
 }
 
@@ -32,11 +33,11 @@ pub fn is_winner_on_board(board: &Board) -> bool {
     paths.any(|path| is_winner_on_path(path, board))
 }
 
-fn all_winning_paths(board_length: uint) -> Vec<Vec<uint>> {
-    let mut paths: Vec<Vec<uint>> = Vec::new();
+fn all_winning_paths(board_length: usize) -> Vec<Vec<usize>> {
+    let mut paths: Vec<Vec<usize>> = Vec::new();
     for n in range(0, board_length) {
-        paths.push(Vec::from_fn(board_length, |idx| board_length * n + idx));
-        paths.push(Vec::from_fn(board_length, |idx| board_length * idx + n));
+        paths.push((0..board_length).map(|idx| board_length * n + idx).collect());
+        paths.push((0..board_length).map(|idx| board_length * idx + n).collect());
     }
     let (diagonal_1, diagonal_2) = diagonal_indexes(board_length);
     paths.push(diagonal_1);
@@ -45,7 +46,7 @@ fn all_winning_paths(board_length: uint) -> Vec<Vec<uint>> {
     paths
 }
 
-fn diagonal_indexes(board_length: uint) -> (Vec<uint>, Vec<uint>) {
+fn diagonal_indexes(board_length: usize) -> (Vec<usize>, Vec<usize>) {
     let mut diagonal_1 = Vec::new();
     let mut diagonal_2 = Vec::new();
     for n in range(0, board_length) {
@@ -55,7 +56,7 @@ fn diagonal_indexes(board_length: uint) -> (Vec<uint>, Vec<uint>) {
     (diagonal_1, diagonal_2)
 }
 
-fn is_winner_on_path(path: &Vec<uint>, board: &Board) -> bool {
+fn is_winner_on_path(path: &Vec<usize>, board: &Board) -> bool {
     let mut tokens = Vec::with_capacity(board.length());
     for n in range(0, path.iter().count()) {
         let cell_index = path[n];
@@ -77,7 +78,8 @@ fn is_full(board: &Board) -> bool {
 #[cfg(test)]
 mod test {
     use super::{is_valid_position, is_game_over, is_full, is_winner_on_board, is_winner_on_path, current_player_and_opponent, winning_token, all_winning_paths};
-    use super::super::board::{Board, X, O};
+    use super::super::board::{Board, Token};
+    use super::super::board::Token::{X, O};
     use super::super::player::Player;
     use super::super::test_helpers;
 
@@ -149,7 +151,7 @@ mod test {
     #[test]
     fn spots_on_board_are_valid() {
         let board: Board = Board::new();
-        for n in range(0u, board.cell_count()) {
+        for n in range(0us, board.cell_count()) {
             assert!(is_valid_position(n, &board));
         }
     }
@@ -192,6 +194,6 @@ mod test {
 
     #[test]
     fn returns_all_winning_paths_on_3_by_3_board() {
-        assert_eq!(all_winning_paths(3u), vec!(vec!(0,1,2), vec!(0,3,6), vec!(3,4,5), vec!(1,4,7), vec!(6,7,8), vec!(2,5,8), vec!(2,4,6), vec!(0,4,8)));
+        assert_eq!(all_winning_paths(3us), vec!(vec!(0,1,2), vec!(0,3,6), vec!(3,4,5), vec!(1,4,7), vec!(6,7,8), vec!(2,5,8), vec!(2,4,6), vec!(0,4,8)));
     }
 }

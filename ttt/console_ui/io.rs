@@ -1,13 +1,14 @@
 use std::io;
+use std::str::FromStr;
 use super::super::core::board::{Board, Token};
 use super::super::core::{rules, simple_ai, unbeatable_ai};
 
-pub fn get_next_move(board: &Board, _tokens: (Token,Token)) -> uint {
+pub fn get_next_move(board: &Board, _tokens: (Token,Token)) -> usize {
     println!("Where do you want to play?");
     loop {
         let reader = &mut io::stdin();
         let input = get_input(reader);
-        let input_num: Option<uint> = from_str(input.as_slice().trim());
+        let input_num: Option<usize> = FromStr::from_str(input.as_slice().trim());
         match input_num {
             Some(position) if rules::is_valid_position(position, board) => return position,
             _ => println!("That is not a valid position. Please select an open spot on the board as an integer.")
@@ -16,7 +17,7 @@ pub fn get_next_move(board: &Board, _tokens: (Token,Token)) -> uint {
 }
 
 
-pub fn get_player_decision_maker<R: Buffer>(player_number: uint, reader: &mut R) -> fn(&Board, (Token,Token)) -> uint {
+pub fn get_player_decision_maker<R: Buffer>(player_number: usize, reader: &mut R) -> fn(&Board, (Token,Token)) -> usize {
     println!("What type of player is player {}? (h)uman, (e)asy computer, or (d)ifficult computer", player_number);
     loop {
         let mut input = get_input(reader);

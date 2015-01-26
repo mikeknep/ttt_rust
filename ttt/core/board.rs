@@ -1,4 +1,4 @@
-static BOARD_SIZE: uint = 9u;
+const BOARD_SIZE: usize = 9us;
 
 #[deriving(PartialEq, Show)]
 pub enum Token {
@@ -6,20 +6,21 @@ pub enum Token {
 }
 
 pub struct Board {
-    pub cells: [Option<Token>, ..BOARD_SIZE]
+    pub cells: [Option<Token>; BOARD_SIZE]
 }
 
 impl Board {
     pub fn new() -> Board {
-        Board { cells: [None, ..BOARD_SIZE] }
+        let cells = [None; BOARD_SIZE];
+        Board { cells: cells }
     }
 
-    pub fn length(&self) -> uint {
+    pub fn length(&self) -> usize {
         let size = BOARD_SIZE as f64;
-        size.sqrt() as uint
+        size.sqrt() as usize
     }
 
-    pub fn cell_count(&self) -> uint {
+    pub fn cell_count(&self) -> usize {
         BOARD_SIZE
     }
 }
@@ -43,6 +44,6 @@ mod test {
         let board: Board = Board::new();
         let mut cells = board.cells.iter();
 
-        assert!(cells.count() == 9u);
+        assert!(cells.count() == 9us);
     }
 }

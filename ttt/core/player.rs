@@ -1,20 +1,21 @@
-use super::board::{Token, Board, X, O};
+use super::board::{Token, Board};
+use super::board::Token::{X, O};
 
 pub struct Player {
     pub token: Token,
-    decision_maker: fn(&Board, (Token,Token)) -> uint
+    decision_maker: fn(&Board, (Token,Token)) -> usize
 }
 
 impl Player {
-    pub fn new_player_1(decision_maker: fn(&Board, (Token,Token)) -> uint) -> Player {
+    pub fn new_player_1(decision_maker: fn(&Board, (Token,Token)) -> usize) -> Player {
         Player { token: X, decision_maker: decision_maker }
     }
 
-    pub fn new_player_2(decision_maker: fn(&Board, (Token,Token)) -> uint) -> Player {
+    pub fn new_player_2(decision_maker: fn(&Board, (Token,Token)) -> usize) -> Player {
         Player { token: O, decision_maker: decision_maker }
     }
 
-    pub fn choose_next_move(&self, board: &Board, tokens: (Token,Token)) -> uint {
+    pub fn choose_next_move(&self, board: &Board, tokens: (Token,Token)) -> usize {
         let dm = self.decision_maker;
         dm(board, tokens)
     }
@@ -26,7 +27,8 @@ impl Player {
 #[cfg(test)]
 mod test {
     use super::Player;
-    use super::super::board::{Board, X, O};
+    use super::super::board::Board;
+    use super::super::board::Token::{X, O};
     use super::super::test_helpers;
 
 
@@ -47,6 +49,6 @@ mod test {
         let player: Player = Player::new_player_1(test_helpers::mock_decision_maker);
         let board = Board::new();
 
-        assert!(player.choose_next_move(&board, (X,O)) == 4u);
+        assert!(player.choose_next_move(&board, (X,O)) == 4us);
     }
 }
